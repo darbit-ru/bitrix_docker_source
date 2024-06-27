@@ -193,7 +193,7 @@ then
 
   cd $DOCKER_FOLDER_PATH
   echo -e "\n\e[33mStarting DOCKER containers...\e[39m"
-  docker-compose up -d
+  docker-compose up -d > /dev/null 2>&1
   echo -e "\e[32m    Started\e[39m\n"
 else
   echo -e "\e[33mBitrixDock is installed. Clear all and remove all containers to reinstall\e[39m"

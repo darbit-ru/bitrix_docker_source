@@ -2,7 +2,7 @@
 services:
     php:
         build: ./php/${PHP_VERSION}
-        container_name: php
+        container_name: ${PROJECT}php
         volumes_from:
             - source
         links:
@@ -18,7 +18,7 @@ services:
 
     web_server:
         build: ./${WEB_SERVER_TYPE}
-        container_name: web_server
+        container_name: ${PROJECT}web_server
         depends_on:
             - source
         volumes_from:
@@ -42,14 +42,14 @@ services:
             args:
                 DOMAIN_EMAIL: ${DOMAIN_EMAIL}
                 DOMAIN_URL: ${DOMAIN_URL}
-        container_name: certbot
+        container_name: ${PROJECT}certbot
         ports:
             - "${INTERFACE}:6000:80"
         volumes:
             - ./nginx/:/etc/nginx/
     db:
         build: ./${DB_SERVER_TYPE}
-        container_name: db
+        container_name: ${PROJECT}db
         volumes:
             - ./${DB_SERVER_TYPE}/init:/docker-entrypoint-initdb.d
         volumes_from:
@@ -71,7 +71,7 @@ services:
 
     memcached:
         image: memcached:latest
-        container_name: memcached
+        container_name: ${PROJECT}memcached
         volumes_from:
             - source
         ports:
@@ -86,7 +86,7 @@ services:
 
     adminer:
         image: dockette/adminer:full
-        container_name: adminer
+        container_name: ${PROJECT}adminer
         links:
             - db:db
         ports:
@@ -110,7 +110,7 @@ services:
             - ./logs/memcached:/var/log/memcached
             - db:/var/lib/mysql
             - cache:/var/lib/memcached
-            - ${SITE_PATH}:/var/www/bitrix
+            - web_server:${SITE_PATH}:/var/www/bitrix
             - /etc/localtime:/etc/localtime/:ro
         networks:
             - bitrixdock
