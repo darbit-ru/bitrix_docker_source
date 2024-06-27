@@ -121,8 +121,8 @@ then
   do
     echo -e "\e[33mEnter site name (websitename.domain | example: mail.ru): \e[39m"
     read SITE_NAME
-    sed -i "s/#DOMAIN_URL#/$SITE_NAME/g" $DOCKER_FOLDER_PATH/.env
   done
+  sed -i "s/#DOMAIN_URL#/$SITE_NAME/g" $DOCKER_FOLDER_PATH/.env
   echo -e "\n"
 
   # checking site installation type
@@ -156,6 +156,9 @@ then
     done
     sed -i "s/#DOMAIN_EMAIL#/$DOMAIN_ADMIN_EMAIL/g" $DOCKER_FOLDER_PATH/.env
     echo -e "\n"
+  else
+    DOMAIN_ADMIN_EMAIL=test@mail.no
+    sed -i "s/#DOMAIN_EMAIL#/$DOMAIN_ADMIN_EMAIL/g" $DOCKER_FOLDER_PATH/.env
   fi
 
   # creating website folder
@@ -193,7 +196,7 @@ then
 
   cd $DOCKER_FOLDER_PATH
   echo -e "\n\e[33mStarting DOCKER containers...\e[39m"
-  docker-compose up -d > /dev/null 2>&1
+  docker-compose up -d
   echo -e "\e[32m    Started\e[39m\n"
 else
   echo -e "\e[33mBitrixDock is installed. Clear all and remove all containers to reinstall\e[39m"
