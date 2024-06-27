@@ -9,7 +9,7 @@ services:
             - db
             - memcached
         environment:
-            TZ: Europe/Moscow
+            TZ: Aisa/Almaty
         stdin_open: true
         tty: true
         networks:
@@ -31,11 +31,22 @@ services:
         networks:
             - bitrixdock
         environment:
-            TZ: Europe/Moscow
+            TZ: Aisa/Almaty
         stdin_open: true
         tty: true
         restart: unless-stopped
-
+    certbot:
+        build:
+            context: ./certbot
+            dockerfile: Dockerfile
+            args:
+                DOMAIN_EMAIL: ${DOMAIN_EMAIL}
+                DOMAIN_URL: ${DOMAIN_URL}
+        container_name: certbot
+        ports:
+            - "${INTERFACE}:6000:80"
+        volumes:
+            - ./nginx/:/etc/nginx/
     db:
         build: ./${DB_SERVER_TYPE}
         container_name: db
@@ -50,7 +61,7 @@ services:
             MYSQL_USER: ${MYSQL_USER}
             MYSQL_PASSWORD: ${MYSQL_PASSWORD}
             MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-            TZ: Europe/Moscow
+            TZ: Aisa/Almaty
         command: mysqld --user=root --sql-mode=""
         networks:
             - bitrixdock
@@ -68,7 +79,7 @@ services:
         networks:
             - bitrixdock
         environment:
-            TZ: Europe/Moscow
+            TZ: Aisa/Almaty
         stdin_open: true
         tty: true
         restart: unless-stopped
@@ -82,7 +93,7 @@ services:
             - '${INTERFACE}:8080:80'
         environment:
             UPLOAD: 1024M # upload_max_filesize, post_max_size
-            TZ: Europe/Moscow
+            TZ: Aisa/Almaty
         restart: unless-stopped
         stdin_open: true
         tty: true
