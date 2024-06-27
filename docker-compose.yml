@@ -110,7 +110,7 @@ services:
             - ./logs/memcached:/var/log/memcached
             - db:/var/lib/mysql
             - cache:/var/lib/memcached
-            - web_server:${SITE_PATH}:/var/www/bitrix
+            - ${SITE_PATH}:/var/www/bitrix
             - /etc/localtime:/etc/localtime/:ro
         networks:
             - bitrixdock
