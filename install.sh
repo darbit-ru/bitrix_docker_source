@@ -170,7 +170,6 @@ then
   echo -e "\n\e[33mConfiguring NGINX conf file \e[39m"
   cp -f $DOCKER_FOLDER_PATH/nginx/conf/default.conf_template $DOCKER_FOLDER_PATH/nginx/conf/conf.d/$SITE_NAME.conf && \
   sed -i "s/#SITE_NAME#/$SITE_NAME/g" $DOCKER_FOLDER_PATH/nginx/conf/conf.d/$SITE_NAME.conf && \
-  sed -i "s|#SITE_PATH#|$WEBSITE_FILES_PATH|g" $DOCKER_FOLDER_PATH/nginx/conf/conf.d/$SITE_NAME.conf && \
   echo -e "\e[32m    Done \e[39m\n"
 
   echo -e "\n\e[33mConfiguring MySQL database... \e[39m"
@@ -187,10 +186,10 @@ then
 
   echo -e "\033[5mCopy and save lines below!!! \033[0m\e[39m\n"
 
-  echo -e "\e[33mDatabase server: db \e[39m"
-  echo -e "\e[33mDatabase name: "$MYSQL_DATABASE" \e[39m"
-  echo -e "\e[33mDatabase user: "$MYSQL_USER" \e[39m"
-  echo -e "\e[33mDatabase password: "$MYSQL_PASSWORD" \e[39m"
+  echo -e "\e[32mDatabase server: db \e[39m"
+  echo -e "\e[32mDatabase name: "$MYSQL_DATABASE" \e[39m"
+  echo -e "\e[32mDatabase user: "$MYSQL_USER" \e[39m"
+  echo -e "\e[32mDatabase password: "$MYSQL_PASSWORD" \e[39m"
 
   cd $DOCKER_FOLDER_PATH
   echo -e "\n\e[33mStarting DOCKER containers...\e[39m"

@@ -4,7 +4,7 @@ server {
 
     server_name #SITE_NAME#;
     charset utf-8;
-    root #SITE_PATH#;
+    root /var/www/bitrix;
     index index.php index.html bitrixsetup.php restore.php;
 
     access_log /var/log/nginx/#SITE_NAME#-access.log;
