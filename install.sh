@@ -168,6 +168,7 @@ then
   cd $WEBSITE_FILES_PATH && \
   if [[ $INSTALLATION_TYPE == "C" ]]; then wget http://www.1c-bitrix.ru/download/scripts/bitrixsetup.php > /dev/null 2>&1; elif [[ $INSTALLATION_TYPE == "R" ]]; then wget http://www.1c-bitrix.ru/download/scripts/restore.php > /dev/null 2>&1; fi && \
   cd $(dirname $WORK_PATH) && chmod -R 775 $(basename $WORK_PATH) && chown -R root:www-data $(basename $WORK_PATH)
+  sed -i "s/#WEBSITE_PATH#/$WEBSITE_FILES_PATH/g" $DOCKER_FOLDER_PATH/.env
   echo -e "\e[32m    Done \e[39m\n"
 
   echo -e "\n\e[33mConfiguring NGINX conf file \e[39m"
@@ -196,7 +197,7 @@ then
 
   cd $DOCKER_FOLDER_PATH
   echo -e "\n\e[33mStarting DOCKER containers...\e[39m"
-  docker-compose up -d
+  docker-compose up -d > /dev/null 2>&1
   echo -e "\e[32m    Started\e[39m\n"
 else
   echo -e "\e[33mBitrixDock is installed. Clear all and remove all containers to reinstall\e[39m"
