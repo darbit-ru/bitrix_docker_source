@@ -121,6 +121,7 @@ then
   do
     echo -e "\e[33mEnter site name (websitename.domain | example: mail.ru): \e[39m"
     read SITE_NAME
+    sed -i "s/#DOMAIN_URL#/$SITE_NAME/g" $DOCKER_FOLDER_PATH/.env
   done
   echo -e "\n"
 
@@ -144,6 +145,18 @@ then
   done
   echo -e "\n"
 
+  if [[ $SSL_INSTALL_ACTION == "Y" ]]
+  then
+    echo -e "\e[33mEnter domain admin email: \e[39m"
+    read DOMAIN_ADMIN_EMAIL
+    until [[ "$DOMAIN_ADMIN_EMAIL" = "" ]]
+    do
+      echo -e "\e[33mEnter domain admin email: \e[39m"
+      read DOMAIN_ADMIN_EMAIL
+    done
+    sed -i "s/#DOMAIN_EMAIL#/$DOMAIN_ADMIN_EMAIL/g" $DOCKER_FOLDER_PATH/.env
+  fi
+
   # creating website folder
   WEBSITE_FILES_PATH=$WORK_PATH/bitrix
   echo -e "\e[33mCreating website folder \e[39m"
@@ -163,15 +176,15 @@ then
   PROJECT_CLEARED_NAME=${SITE_NAME%*.*} && echo $output | tr '.' '_' | tr '-' '_'
 
   MYSQL_DATABASE=$PROJECT_CLEARED_NAME"_db"
-  sed -i "s/#MYSQL_DATABASE#/$MYSQL_DATABASE/g" $DOCKER_FOLDER_PATH/.env
+  sed -i "s|#MYSQL_DATABASE#|$MYSQL_DATABASE|g" $DOCKER_FOLDER_PATH/.env
 
   MYSQL_USER=$PROJECT_CLEARED_NAME"_user"
-  sed -i "s/#MYSQL_USER#/$MYSQL_USER/g" $DOCKER_FOLDER_PATH/.env
+  sed -i "s|#MYSQL_USER#|$MYSQL_USER|g" $DOCKER_FOLDER_PATH/.env
 
   MYSQL_PASSWORD=$(openssl rand -base64 32)
-  sed -i "s/#MYSQL_PASSWORD#/$MYSQL_PASSWORD/g" $DOCKER_FOLDER_PATH/.env
+  sed -i "s|#MYSQL_PASSWORD#|$MYSQL_PASSWORD|g" $DOCKER_FOLDER_PATH/.env
 
-  echo -e "\033[5mCopy and save lines below!!! \e[39m\n"
+  echo -e "\033[5mCopy and save lines below!!! \033[0m\e[39m\n"
 
   echo -e "\e[33mDatabase server: db \e[39m"
   echo -e "\e[33mDatabase name: "$MYSQL_DATABASE" \e[39m"
