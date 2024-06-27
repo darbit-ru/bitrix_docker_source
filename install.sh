@@ -159,9 +159,28 @@ then
   sed -i "s|#SITE_PATH#|$WEBSITE_FILES_PATH|g" $DOCKER_FOLDER_PATH/nginx/conf/conf.d/$SITE_NAME.conf && \
   echo -e "\e[32m    Done \e[39m\n"
 
+  echo -e "\n\e[33mConfiguring MySQL database... \e[39m"
+  PROJECT_CLEARED_NAME=${SITE_NAME%*.*} && echo $output | tr '.' '_' | tr '-' '_'
+
+  MYSQL_DATABASE=$PROJECT_CLEARED_NAME"_db"
+  sed -i "s/#MYSQL_DATABASE#/$MYSQL_DATABASE/g" $DOCKER_FOLDER_PATH/.env
+
+  MYSQL_USER=$PROJECT_CLEARED_NAME"_user"
+  sed -i "s/#MYSQL_USER#/$MYSQL_USER/g" $DOCKER_FOLDER_PATH/.env
+
+  MYSQL_PASSWORD=$(openssl rand -base64 32)
+  sed -i "s/#MYSQL_PASSWORD#/$MYSQL_PASSWORD/g" $DOCKER_FOLDER_PATH/.env
+
+  echo -e "\033[5mCopy and save lines below!!! \e[39m\n"
+
+  echo -e "\e[33mDatabase server: db \e[39m"
+  echo -e "\e[33mDatabase name: "$MYSQL_DATABASE" \e[39m"
+  echo -e "\e[33mDatabase user: "$MYSQL_USER" \e[39m"
+  echo -e "\e[33mDatabase password: "$MYSQL_PASSWORD" \e[39m"
+
   cd $DOCKER_FOLDER_PATH
   echo -e "\n\e[33mStarting DOCKER containers...\e[39m"
-  docker-compose up -d > /dev/null 2>&1
+  docker-compose up -d
   echo -e "\e[32m    Started\e[39m\n"
 else
   echo -e "\e[33mBitrixDock is installed. Clear all and remove all containers to reinstall\e[39m"
