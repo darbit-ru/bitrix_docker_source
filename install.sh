@@ -149,7 +149,7 @@ then
   then
     echo -e "\e[33mEnter domain admin email: \e[39m"
     read DOMAIN_ADMIN_EMAIL
-    until [[ "$DOMAIN_ADMIN_EMAIL" = "" ]]
+    until [[ "$DOMAIN_ADMIN_EMAIL" != "" ]]
     do
       echo -e "\e[33mEnter domain admin email: \e[39m"
       read DOMAIN_ADMIN_EMAIL
