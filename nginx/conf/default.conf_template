@@ -27,20 +27,20 @@ server {
     }
 
     location / {
-        if (-f #SITE_PATH#/index.php) {
-            root #SITE_PATH#;
+        if (-f /var/www/bitrix/index.php) {
+            root /var/www/bitrix;
             break;
         }
-        if (-f #SITE_PATH#/bitrixsetup.php) {
-            root #SITE_PATH#;
+        if (-f /var/www/bitrix/bitrixsetup.php) {
+            root /var/www/bitrix;
             break;
         }
-        if (-f #SITE_PATH#/restore.php) {
-            root #SITE_PATH#;
+        if (-f /var/www/bitrix/restore.php) {
+            root /var/www/bitrix;
             break;
         }
         try_files $uri $uri/ @bitrix;
-        root  #SITE_PATH#;
+        root  /var/www/bitrix;
     }
 
     location @bitrix {
