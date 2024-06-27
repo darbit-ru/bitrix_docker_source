@@ -111,6 +111,7 @@ then
     read MYSQL_DATABASE_ROOT_PASSWORD
   done
   sed -i "s/#DATABASE_ROOT_PASSWORD#/$MYSQL_DATABASE_ROOT_PASSWORD/g" $DOCKER_FOLDER_PATH/.env
+  echo -e "\n"
 
   # checking site name domain
   echo -e "\e[33mEnter site name (websitename.domain | example: mail.ru): \e[39m"
@@ -121,6 +122,7 @@ then
     echo -e "\e[33mEnter site name (websitename.domain | example: mail.ru): \e[39m"
     read SITE_NAME
   done
+  echo -e "\n"
 
   # checking site installation type
   echo -e "\e[33mSite installation type? (C - clear install bitrixsetup.php / R - restore from backup): \e[39m"
@@ -130,6 +132,7 @@ then
     echo -e "\e[33mSite installation type? (C - clear install bitrixsetup.php / R - restore from backup): \e[39m"
     read INSTALLATION_TYPE
   done
+  echo -e "\n"
 
   # checking site installation type
   echo -e "\e[33mDo you want install SSL from letsencrypt? (Y/N): \e[39m"
@@ -139,6 +142,7 @@ then
     echo -e "\e[33mDo you want install SSL from letsencrypt? (Y/N): \e[39m"
     read SSL_INSTALL_ACTION
   done
+  echo -e "\n"
 
   # creating website folder
   WEBSITE_FILES_PATH=$WORK_PATH/bitrix
@@ -156,8 +160,9 @@ then
   echo -e "\e[32m    Done \e[39m\n"
 
   cd $DOCKER_FOLDER_PATH
-  echo -e "\n\e[32mStarting DOCKER containers \e[39m\n"
+  echo -e "\n\e[33mStarting DOCKER containers...\e[39m"
   docker-compose up -d > /dev/null 2>&1
+  echo -e "\e[32m    Started\e[39m\n"
 else
   echo -e "\e[33mBitrixDock is installed. Clear all and remove all containers to reinstall\e[39m"
 fi
