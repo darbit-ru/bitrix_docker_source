@@ -155,6 +155,7 @@ then
       read DOMAIN_ADMIN_EMAIL
     done
     sed -i "s/#DOMAIN_EMAIL#/$DOMAIN_ADMIN_EMAIL/g" $DOCKER_FOLDER_PATH/.env
+    echo -e "\n"
   fi
 
   # creating website folder
