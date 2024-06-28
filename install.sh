@@ -159,6 +159,15 @@ then
     done
     sed -i "s/#DOMAIN_EMAIL#/$DOMAIN_ADMIN_EMAIL/g" $DOCKER_FOLDER_PATH/.env
     echo -e "\n"
+
+    echo -e "\e[33mGenerate certificate for www.$SITE_NAME too?: \e[39m"
+    read SSL_INSTALL_WWW
+    until [[ $SSL_INSTALL_WWW != "Y" || $SSL_INSTALL_WWW != "N" ]]
+    do
+      echo -e "\e[33mGenerate certificate for www.$SITE_NAME too?: \e[39m"
+      read SSL_INSTALL_WWW
+    done
+    echo -e "\n"
   else
     DOMAIN_ADMIN_EMAIL=test@mail.no
     sed -i "s/#DOMAIN_EMAIL#/$DOMAIN_ADMIN_EMAIL/g" $DOCKER_FOLDER_PATH/.env
@@ -174,34 +183,67 @@ then
   sed -i "s|#WEBSITE_PATH#|$WEBSITE_FILES_PATH|g" $DOCKER_FOLDER_PATH/.env
   echo -e "\e[32m    Done \e[39m\n"
 
+  # configuring nginx file
   echo -e "\n\e[33mConfiguring NGINX conf file \e[39m"
   cp -f $DOCKER_FOLDER_PATH/nginx/conf/default.conf_template $DOCKER_FOLDER_PATH/nginx/conf/conf.d/$SITE_NAME.conf && \
   sed -i "s/#SITE_NAME#/$SITE_NAME/g" $DOCKER_FOLDER_PATH/nginx/conf/conf.d/$SITE_NAME.conf && \
   echo -e "\e[32m    Done \e[39m\n"
 
+  # configuring database credentials
   echo -e "\n\e[33mConfiguring MySQL database... \e[39m"
   PROJECT_CLEARED_NAME=${SITE_NAME%*.*} && echo $output | tr '.' '_' | tr '-' '_'
-
   MYSQL_DATABASE=$PROJECT_CLEARED_NAME"_db"
   sed -i "s|#MYSQL_DATABASE#|$MYSQL_DATABASE|g" $DOCKER_FOLDER_PATH/.env
-
   MYSQL_USER=$PROJECT_CLEARED_NAME"_user"
   sed -i "s|#MYSQL_USER#|$MYSQL_USER|g" $DOCKER_FOLDER_PATH/.env
-
   MYSQL_PASSWORD=$(openssl rand -base64 32)
   sed -i "s|#MYSQL_PASSWORD#|$MYSQL_PASSWORD|g" $DOCKER_FOLDER_PATH/.env
-
   echo -e "\033[5mCopy and save lines below!!! \033[0m\e[39m\n"
-
   echo -e "\e[32mDatabase server: db \e[39m"
   echo -e "\e[32mDatabase name: "$MYSQL_DATABASE" \e[39m"
   echo -e "\e[32mDatabase user: "$MYSQL_USER" \e[39m"
   echo -e "\e[32mDatabase password: "$MYSQL_PASSWORD" \e[39m"
 
+  # starting docker containers
   cd $DOCKER_FOLDER_PATH
   echo -e "\n\e[33mStarting DOCKER containers...\e[39m"
-  docker-compose up -d > /dev/null 2>&1
+  docker-compose up -d
   echo -e "\e[32m    Started\e[39m\n"
+
+  #
+  if [[ $SSL_INSTALL_ACTION == "Y" ]]
+  then
+    if [[ $SSL_INSTALL_WWW == "Y" ]]
+    then
+      echo -e "\e[33mPrepare to sending request to generate certificate for domains - $SITE_NAME, www.$SITE_NAME (Attention! Be sure that domain www.$SITE_NAME is correctly setup in domain control panel with A or CNAME dns record) \e[39m"
+    else
+      echo -e "\e[33mPrepare to sending request to generate certificate for domain - $SITE_NAME \e[39m"
+    fi
+
+    echo -e "\e[33mIs domains settings correct setup in domain control panel? (Y/N): \e[39m"
+    read IS_CORRECT_DOMAIN
+    until [[ $IS_CORRECT_DOMAIN != "Y" || $IS_CORRECT_DOMAIN != "N" ]]
+    do
+        echo -e "\e[33mIs domains settings correct setup in domain control panel? (Y/N): \e[39m"
+        read IS_CORRECT_DOMAIN
+    done
+
+    if [[ $SSL_INSTALL_ACTION == "Y" ]]
+    then
+        if [[ $SSL_INSTALL_WWW == "Y" ]]
+        then
+          docker exec -it darbit_docker_web_server /bin/bash -c "certbot --nginx -d $SITE_NAME -d www.$SITE_NAME"
+        else
+          docker exec -it darbit_docker_web_server /bin/bash -c "certbot --nginx -d $SITE_NAME"
+        fi
+
+        DOCKER_FOLDER_PATH=$WORK_PATH/bitrixdock
+        mv $DOCKER_FOLDER_PATH/nginx/conf/conf.d/$SITE_NAME.conf $DOCKER_FOLDER_PATH/nginx/conf/conf.d/$SITE_NAME.conf.old && \
+        docker cp darbit_docker_webserver:/etc/nginx/conf.d/$SITE_NAME.conf $DOCKER_FOLDER_PATH/nginx/conf/conf.d/ && \
+        docker cp darbit_docker_webserver:/etc/letsencrypt/ $DOCKER_FOLDER_PATH/nginx/letsencrypt/
+    fi
+    echo -e "\e[32m    Done \e[39m\n"
+  fi
 else
   echo -e "\e[33mBitrixDock is installed. Clear all and remove all containers to reinstall\e[39m"
 fi
