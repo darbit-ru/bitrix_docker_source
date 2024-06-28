@@ -4,6 +4,7 @@ LABEL org.opencontainers.image.source="https://github.com/bitrixdock/bitrixdock"
 
 COPY conf/nginx.conf /etc/nginx/
 COPY conf/conf.d/ /etc/nginx/conf.d/
+COPY ssl/ /etc/nginx/ssl/
 
 RUN usermod -u 1000 www-data
 

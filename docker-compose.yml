@@ -35,18 +35,7 @@ services:
         stdin_open: true
         tty: true
         restart: unless-stopped
-    certbot:
-        build:
-            context: ./certbot
-            dockerfile: Dockerfile
-            args:
-                DOMAIN_EMAIL: ${DOMAIN_EMAIL}
-                DOMAIN_URL: ${DOMAIN_URL}
-        container_name: ${PROJECT}certbot
-        ports:
-            - "${INTERFACE}:6000:80"
-        volumes:
-            - ./nginx/:/etc/nginx/
+
     db:
         build: ./${DB_SERVER_TYPE}
         container_name: ${PROJECT}db
@@ -100,6 +89,19 @@ services:
         networks:
             - bitrixdock
 
+    certbot:
+        build:
+            context: ./certbot
+            dockerfile: Dockerfile
+            args:
+                DOMAIN_EMAIL: ${DOMAIN_EMAIL}
+                DOMAIN_URL: ${DOMAIN_URL}
+        container_name: ${PROJECT}certbot
+        ports:
+            - "${INTERFACE}:6000:80"
+        volumes:
+            - ./nginx/:/etc/nginx/
+
     source:
         image: alpine:latest
         container_name: source
@@ -107,6 +109,7 @@ services:
             - ./logs/${WEB_SERVER_TYPE}:/var/log/${WEB_SERVER_TYPE}
             - ./logs/php:/var/log/php
             - ./logs/db:/var/log/mysql
+            - ./logs/certbot:/var/log/certbot
             - ./logs/memcached:/var/log/memcached
             - db:/var/lib/mysql
             - cache:/var/lib/memcached
