@@ -168,7 +168,7 @@ then
   cd $WEBSITE_FILES_PATH && \
   if [[ $INSTALLATION_TYPE == "C" ]]; then wget http://www.1c-bitrix.ru/download/scripts/bitrixsetup.php > /dev/null 2>&1; elif [[ $INSTALLATION_TYPE == "R" ]]; then wget http://www.1c-bitrix.ru/download/scripts/restore.php > /dev/null 2>&1; fi && \
   cd $(dirname $WORK_PATH) && chmod -R 775 $(basename $WORK_PATH) && chown -R root:www-data $(basename $WORK_PATH)
-  sed -i "s/#WEBSITE_PATH#/$WEBSITE_FILES_PATH/g" $DOCKER_FOLDER_PATH/.env
+  sed -i "s|#WEBSITE_PATH#|$WEBSITE_FILES_PATH|g" $DOCKER_FOLDER_PATH/.env
   echo -e "\e[32m    Done \e[39m\n"
 
   echo -e "\n\e[33mConfiguring NGINX conf file \e[39m"
