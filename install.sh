@@ -191,7 +191,7 @@ then
 
   # configuring database credentials
   echo -e "\n\e[33mConfiguring MySQL database... \e[39m"
-  PROJECT_CLEARED_NAME=$SITE_NAME && echo $output | tr '.' '_' | tr '-' '_'
+  PROJECT_CLEARED_NAME=echo $SITE_NAME | tr '.' '_' | tr '-' '_'
   MYSQL_DATABASE=$PROJECT_CLEARED_NAME"_db"
   sed -i "s|#MYSQL_DATABASE#|$MYSQL_DATABASE|g" $DOCKER_FOLDER_PATH/.env
   MYSQL_USER=$PROJECT_CLEARED_NAME"_user"
