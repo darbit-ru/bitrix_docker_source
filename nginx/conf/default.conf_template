@@ -43,6 +43,10 @@ server {
         root  /var/www/bitrix;
     }
 
+    location /.well-known {
+        root /var/www/bitrix;
+    }
+
     location @bitrix {
         fastcgi_pass php-upstream;
         include fastcgi_params;
