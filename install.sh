@@ -44,7 +44,7 @@ if hash docker-compose > /dev/null 2>&1
 then
   echo -e "\e[32m    DOCKER-COMPOSE installed \e[39m"
 else
-  echo -e "\e[31m    DOCKER-COMPOSE not installed, install started \e[39m" && curl -L "https://github.com/docker/compose/releases/download/1.25.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose && source ~/.bashrc > /dev/null 2>&1
+  echo -e "\e[31m    DOCKER-COMPOSE not installed, install started \e[39m" && curl -L "https://github.com/docker/compose/releases/download/v2.28.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose && source ~/.bashrc > /dev/null 2>&1
 fi
 
 # show message that all required packets installed
@@ -191,7 +191,8 @@ then
 
   # configuring database credentials
   echo -e "\n\e[33mConfiguring MySQL database... \e[39m"
-  PROJECT_CLEARED_NAME=echo $SITE_NAME | tr '.' '_' | tr '-' '_'
+  PROJECT_CLEARED_FROM_DOTS=${SITE_NAME//./_}
+  PROJECT_CLEARED_NAME=${PROJECT_CLEARED_FROM_DOTS//-/_}
   MYSQL_DATABASE=$PROJECT_CLEARED_NAME"_db"
   sed -i "s|#MYSQL_DATABASE#|$MYSQL_DATABASE|g" $DOCKER_FOLDER_PATH/.env
   MYSQL_USER=$PROJECT_CLEARED_NAME"_user"
@@ -207,7 +208,7 @@ then
   # starting docker containers
   cd $DOCKER_FOLDER_PATH
   echo -e "\n\e[33mStarting DOCKER containers...\e[39m"
-  docker-compose up -d
+  docker-compose up -d > /dev/null 2>&1
   echo -e "\e[32m    Started\e[39m\n"
 
   #
