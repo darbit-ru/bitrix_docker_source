@@ -4,7 +4,7 @@ LABEL org.opencontainers.image.source="https://github.com/bitrixdock/bitrixdock"
 
 RUN apt-get update \
     && apt-get -y --no-install-recommends install \
-    && apt-get install python-certbot-nginx -y \
+    && apt-get -y install python3-certbot-nginx \
     && apt-get -y install cron
 
 ADD conf/nginx.conf /etc/nginx/
