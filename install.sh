@@ -240,8 +240,8 @@ then
 
         DOCKER_FOLDER_PATH=$WORK_PATH/bitrixdock
         mv $DOCKER_FOLDER_PATH/nginx/conf/conf.d/$SITE_NAME.conf $DOCKER_FOLDER_PATH/nginx/conf/conf.d/$SITE_NAME.conf.old && \
-        docker cp darbit_docker_webserver:/etc/nginx/conf.d/$SITE_NAME.conf $DOCKER_FOLDER_PATH/nginx/conf/conf.d/ && \
-        docker cp darbit_docker_webserver:/etc/letsencrypt/ $DOCKER_FOLDER_PATH/nginx/letsencrypt/
+        docker cp darbit_docker_web_server:/etc/nginx/conf.d/$SITE_NAME.conf $DOCKER_FOLDER_PATH/nginx/conf/conf.d/ && \
+        docker cp darbit_docker_web_server:/etc/letsencrypt/ $DOCKER_FOLDER_PATH/nginx/letsencrypt/
     fi
     echo -e "\e[32m    Done \e[39m\n"
   fi
