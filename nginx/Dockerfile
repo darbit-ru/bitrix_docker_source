@@ -3,8 +3,9 @@ FROM nginx:1.20.2
 LABEL org.opencontainers.image.source="https://github.com/bitrixdock/bitrixdock"
 
 RUN apt-get update \
-    && apt-get -y install python3-certbot-nginx \
-    && apt-get -y install cron
+    && apt-get -y install cron \
+    && apt-get -y install certbot \
+    && apt-get -y install python3-certbot-nginx
 
 ADD conf/nginx.conf /etc/nginx/
 COPY conf/conf.d/ /etc/nginx/conf.d/

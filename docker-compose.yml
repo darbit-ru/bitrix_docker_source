@@ -51,7 +51,7 @@ services:
             MYSQL_USER: ${MYSQL_USER}
             MYSQL_PASSWORD: ${MYSQL_PASSWORD}
             TZ: Aisa/Almaty
-        command: --default-authentication-plugin=mysql_native_password
+        command: ["--default-authentication-plugin=mysql_native_password", "--sql_mode="]
         networks:
             - bitrixdock
         stdin_open: true

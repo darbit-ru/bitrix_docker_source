@@ -150,27 +150,14 @@ then
 
   if [[ $SSL_INSTALL_ACTION == "Y" ]]
   then
-    echo -e "\e[33mEnter domain admin email: \e[39m"
-    read DOMAIN_ADMIN_EMAIL
-    until [[ "$DOMAIN_ADMIN_EMAIL" != "" ]]
-    do
-      echo -e "\e[33mEnter domain admin email: \e[39m"
-      read DOMAIN_ADMIN_EMAIL
-    done
-    sed -i "s/#DOMAIN_EMAIL#/$DOMAIN_ADMIN_EMAIL/g" $DOCKER_FOLDER_PATH/.env
-    echo -e "\n"
-
     echo -e "\e[33mGenerate certificate for www.$SITE_NAME too?: \e[39m"
     read SSL_INSTALL_WWW
     until [[ $SSL_INSTALL_WWW != "Y" || $SSL_INSTALL_WWW != "N" ]]
     do
-      echo -e "\e[33mGenerate certificate for www.$SITE_NAME too?: \e[39m"
+      echo -e "\e[33mGenerate certificate for www.$SITE_NAME too (with www prefix)?: \e[39m"
       read SSL_INSTALL_WWW
     done
     echo -e "\n"
-  else
-    DOMAIN_ADMIN_EMAIL=test@mail.no
-    sed -i "s/#DOMAIN_EMAIL#/$DOMAIN_ADMIN_EMAIL/g" $DOCKER_FOLDER_PATH/.env
   fi
 
   # creating website folder
@@ -241,7 +228,7 @@ then
         DOCKER_FOLDER_PATH=$WORK_PATH/bitrixdock
         mv $DOCKER_FOLDER_PATH/nginx/conf/conf.d/$SITE_NAME.conf $DOCKER_FOLDER_PATH/nginx/conf/conf.d/$SITE_NAME.conf.old && \
         docker cp darbit_docker_web_server:/etc/nginx/conf.d/$SITE_NAME.conf $DOCKER_FOLDER_PATH/nginx/conf/conf.d/ && \
-        docker cp darbit_docker_web_server:/etc/letsencrypt/ $DOCKER_FOLDER_PATH/nginx/letsencrypt/
+        docker cp darbit_docker_web_server:/etc/letsencrypt/. $DOCKER_FOLDER_PATH/nginx/letsencrypt/
     fi
     echo -e "\e[32m    Done \e[39m\n"
   fi
