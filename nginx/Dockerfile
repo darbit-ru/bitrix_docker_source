@@ -15,10 +15,9 @@ COPY cron/cronjob /etc/cron.d/cronjob
 RUN chmod 0644 /etc/cron.d/cronjob
 RUN crontab /etc/cron.d/cronjob
 RUN touch /var/log/cron.log
-CMD cron
 
 RUN usermod -u 1000 www-data
 
-CMD ["nginx"]
+CMD ["nginx", "cron"]
 
 EXPOSE 80 443
