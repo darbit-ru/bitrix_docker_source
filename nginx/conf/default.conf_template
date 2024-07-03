@@ -114,3 +114,18 @@ server {
 
     location /404.html {}
 }
+
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+
+    server_name #SITE_NAME#;
+
+
+    include tls_params;
+    include hardening;
+
+    location /.well-known {
+        root /var/www/bitrix;
+    }
+}
