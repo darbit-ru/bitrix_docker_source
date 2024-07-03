@@ -150,7 +150,7 @@ then
 
   if [[ $SSL_INSTALL_ACTION == "Y" ]]
   then
-    echo -e "\e[33mGenerate certificate for www.$SITE_NAME too?: \e[39m"
+    echo -e "\e[33mGenerate certificate for www.$SITE_NAME too? (Y/N): \e[39m"
     read SSL_INSTALL_WWW
     until [[ $SSL_INSTALL_WWW != "Y" || $SSL_INSTALL_WWW != "N" ]]
     do
