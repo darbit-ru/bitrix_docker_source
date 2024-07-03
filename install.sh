@@ -188,7 +188,7 @@ then
   sed -i "s|#MYSQL_PASSWORD#|$MYSQL_PASSWORD|g" $DOCKER_FOLDER_PATH/.env
   echo -e "\033[5mCopy and save lines below!!! \033[0m\e[39m\n"
   echo -e "\e[32mDatabase server: db \e[39m"
-  echo -e "\e[32mDatabase name: bitrix_db \e[39m"
+  echo -e "\e[32mDatabase name: bitrix \e[39m"
   echo -e "\e[32mDatabase user: bitrix \e[39m"
   echo -e "\e[32mDatabase password: "$MYSQL_PASSWORD" \e[39m"
 
