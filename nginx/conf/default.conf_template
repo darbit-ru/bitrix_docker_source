@@ -121,7 +121,6 @@ server {
 
     server_name #SITE_NAME#;
 
-
     include tls_params;
     include hardening;
 
