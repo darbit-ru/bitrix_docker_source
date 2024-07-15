@@ -1,0 +1,1 @@
+Download .sh installer file from https://github.com/darbit-ru/bitrix_docker_installer and run it.
