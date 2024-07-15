@@ -5,7 +5,8 @@ LABEL org.opencontainers.image.source="https://github.com/bitrixdock/bitrixdock"
 RUN apt-get update \
     && apt-get -y install cron \
     && apt-get -y install certbot \
-    && apt-get -y install python3-certbot-nginx
+    && apt-get -y install python3-certbot-nginx \
+    &&
 
 ADD conf/nginx.conf /etc/nginx/
 COPY conf/conf.d/ /etc/nginx/conf.d/
@@ -18,6 +19,8 @@ RUN touch /var/log/cron.log
 CMD cron
 
 RUN usermod -u 1000 www-data
+
+STOPSIGNAL SIGTERM
 
 CMD ["nginx"]
 

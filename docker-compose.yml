@@ -16,11 +16,41 @@ services:
             - bitrixdock
         restart: unless-stopped
 
+    redis:
+        build: ./redis
+        container_name: ${PROJECT}redis
+        volumes_from:
+            - source
+
+    pub:
+        build: ./push
+        container_name: ${PROJECT}pub
+        environment:
+            - PUSHROLE=pub
+        volumes_from:
+            - source
+        depends_on:
+            - redis
+        restart: unless-stopped
+
+    sub:
+        build: ./push
+        container_name: ${PROJECT}sub
+        environment:
+            - PUSHROLE=sub
+        volumes_from:
+            - source
+        depends_on:
+            - redis
+        restart: unless-stopped
+
     web_server:
         build: ./${WEB_SERVER_TYPE}
         container_name: ${PROJECT}web_server
         depends_on:
             - source
+            - sub
+            - pub
         volumes_from:
             - source
         ports:
@@ -85,6 +115,8 @@ services:
             - cache:/var/lib/memcached
             - ${SITE_PATH}:/var/www/bitrix
             - /etc/localtime:/etc/localtime/:ro
+            - ./logs/redis:/var/log/redis
+            - ./logs/push-server:/var/log/push-server
         networks:
             - bitrixdock
 
