@@ -16,12 +16,17 @@ RUN apt-get update \
     php7.4-opcache \
     php7.4-soap \
     php7.4-zip \
+    && apt-get -y install supervisor \
     && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
 # DO NOT install php7.4-xdebug package for site running in production! It will slow it down significantly.
 
 COPY ./php.ini /etc/php/7.4/fpm/conf.d/90-php.ini
 COPY ./php.ini /etc/php/7.4/cli/conf.d/90-php.ini
+
+COPY ./conf/supervisor/messanger.conf /etc/supervisor/conf.d/messanger.conf
+COPY ./conf/supervisor/worker.conf /etc/supervisor/conf.d/worker.conf
+CMD supervisor
 
 RUN usermod -u 1000 www-data
 
