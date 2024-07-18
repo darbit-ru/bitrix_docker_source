@@ -9,7 +9,7 @@ services:
             - db
             - memcached
         environment:
-            TZ: Aisa/Almaty
+            TZ: Asia/Almaty
         stdin_open: true
         tty: true
         networks:
@@ -19,27 +19,27 @@ services:
     redis:
         build: ./redis
         container_name: ${PROJECT}redis
-        volumes_from:
-            - source
+        volumes:
+            - ./logs/redis:/var/log/redis
 
     pub:
-        build: ./push
+        build: push
         container_name: ${PROJECT}pub
         environment:
             - PUSHROLE=pub
-        volumes_from:
-            - source
+        volumes:
+            - ./logs/push-server:/var/log/push-server
         depends_on:
             - redis
         restart: unless-stopped
 
     sub:
-        build: ./push
+        build: push
         container_name: ${PROJECT}sub
         environment:
             - PUSHROLE=sub
-        volumes_from:
-            - source
+        volumes:
+            - ./logs/push-server:/var/log/push-server
         depends_on:
             - redis
         restart: unless-stopped
@@ -58,10 +58,12 @@ services:
             - '${INTERFACE}:443:443'
         links:
             - php
+            - pub
+            - sub
         networks:
             - bitrixdock
         environment:
-            TZ: Aisa/Almaty
+            TZ: Asia/Almaty
         stdin_open: true
         tty: true
         restart: unless-stopped
@@ -80,7 +82,7 @@ services:
             MYSQL_DATABASE: ${MYSQL_DATABASE}
             MYSQL_USER: ${MYSQL_USER}
             MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-            TZ: Aisa/Almaty
+            TZ: Asia/Almaty
         command: ["--default-authentication-plugin=mysql_native_password", "--sql_mode="]
         networks:
             - bitrixdock
@@ -98,7 +100,7 @@ services:
         networks:
             - bitrixdock
         environment:
-            TZ: Aisa/Almaty
+            TZ: Asia/Almaty
         stdin_open: true
         tty: true
         restart: unless-stopped
@@ -115,8 +117,6 @@ services:
             - cache:/var/lib/memcached
             - ${SITE_PATH}:/var/www/bitrix
             - /etc/localtime:/etc/localtime/:ro
-            - ./logs/redis:/var/log/redis
-            - ./logs/push-server:/var/log/push-server
         networks:
             - bitrixdock
 

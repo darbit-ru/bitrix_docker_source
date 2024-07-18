@@ -1,7 +1,5 @@
 FROM phpdockerio/php:7.4-fpm
 
-LABEL org.opencontainers.image.source="https://github.com/bitrixdock/bitrixdock"
-
 RUN apt-get update \
     && apt-get -y --no-install-recommends install \
     php7.4-gd \

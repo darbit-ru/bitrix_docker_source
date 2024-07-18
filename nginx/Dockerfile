@@ -1,7 +1,5 @@
 FROM nginx:1.20.2
 
-LABEL org.opencontainers.image.source="https://github.com/bitrixdock/bitrixdock"
-
 RUN apt-get update \
     && apt-get -y install cron \
     && apt-get -y install certbot \
@@ -18,8 +16,6 @@ RUN touch /var/log/cron.log
 CMD cron
 
 RUN usermod -u 1000 www-data
-
-STOPSIGNAL SIGTERM
 
 CMD ["nginx"]
 
