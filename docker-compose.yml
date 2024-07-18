@@ -27,8 +27,10 @@ services:
         container_name: ${PROJECT}pub
         environment:
             - PUSHROLE=pub
-        volumes:
-            - ./logs/push-server:/var/log/push-server
+        volumes_from:
+            - source
+        links:
+            - php
         depends_on:
             - redis
         restart: unless-stopped
@@ -38,8 +40,10 @@ services:
         container_name: ${PROJECT}sub
         environment:
             - PUSHROLE=sub
-        volumes:
-            - ./logs/push-server:/var/log/push-server
+        volumes_from:
+            - source
+        links:
+            - php
         depends_on:
             - redis
         restart: unless-stopped
@@ -117,6 +121,7 @@ services:
             - cache:/var/lib/memcached
             - ${SITE_PATH}:/var/www/bitrix
             - /etc/localtime:/etc/localtime/:ro
+            - ./logs/push-server:/var/log/push-server
         networks:
             - bitrixdock
 
