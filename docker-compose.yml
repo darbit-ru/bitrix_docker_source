@@ -1,4 +1,4 @@
----
+
 services:
     php:
         build: ./php/${PHP_VERSION}
@@ -19,8 +19,8 @@ services:
     redis:
         build: ./redis
         container_name: ${PROJECT}redis
-        volumes:
-            - ./logs/redis:/var/log/redis
+        volumes_from:
+            - source
 
     push_pub:
         build: push-pub
@@ -118,6 +118,7 @@ services:
             - ${SITE_PATH}:/var/www/bitrix
             - /etc/localtime:/etc/localtime/:ro
             - ./logs/push-server:/var/log/push-server
+            - ./logs/redis:/var/log/redis
         networks:
             - bitrixdock
 
@@ -129,3 +130,4 @@ volumes:
 
 networks:
     bitrixdock:
+        enable_ipv6: false
