@@ -33,9 +33,6 @@ services:
             - PUSHROLE=pub
         volumes_from:
             - source
-        ports:
-            - '${INTERFACE}:9010:9010'
-            - '${INTERFACE}:9011:9011'
         networks:
             - bitrixdock
         depends_on:
@@ -49,9 +46,6 @@ services:
             - PUSHROLE=sub
         volumes_from:
             - source
-        ports:
-            - '${INTERFACE}:8010:8010'
-            - '${INTERFACE}:8011:8011'
         networks:
             - bitrixdock
         depends_on:
