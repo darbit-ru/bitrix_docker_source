@@ -19,6 +19,8 @@ services:
     redis:
         build: ./redis
         container_name: ${PROJECT}redis
+        networks:
+            - bitrixdock
         volumes_from:
             - source
 
@@ -29,6 +31,8 @@ services:
             - PUSHROLE=pub
         volumes_from:
             - source
+        networks:
+            - bitrixdock
         depends_on:
             - redis
         restart: unless-stopped
@@ -40,6 +44,8 @@ services:
             - PUSHROLE=sub
         volumes_from:
             - source
+        networks:
+            - bitrixdock
         depends_on:
             - redis
         restart: unless-stopped
