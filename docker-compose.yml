@@ -21,8 +21,6 @@ services:
         container_name: ${PROJECT}redis
         networks:
             - bitrixdock
-        ports:
-            - '${INTERFACE}:6379:6379'
         volumes_from:
             - source
 
