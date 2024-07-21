@@ -27,6 +27,8 @@ services:
     push_pub:
         build: push-pub
         container_name: ${PROJECT}pub
+        env_file:
+            - .env
         environment:
             - PUSHROLE=pub
         volumes_from:
@@ -40,6 +42,8 @@ services:
     push_sub:
         build: push-sub
         container_name: ${PROJECT}sub
+        env_file:
+            - .env
         environment:
             - PUSHROLE=sub
         volumes_from:
