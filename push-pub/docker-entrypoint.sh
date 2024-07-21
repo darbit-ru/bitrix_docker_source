@@ -72,7 +72,7 @@ elif [[ $PUSHROLE == "pub" && \
 fi
 
 rm -rf /etc/push-server/$PUB_TMPL
-rm -rf /etc/push-server/$PUB_TMPL
+rm -rf /etc/push-server/$SUB_TMPL
 
 /usr/local/bin/push-server-multi stop
 
