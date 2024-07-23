@@ -27,10 +27,9 @@ services:
     push_pub:
         build: push_server
         container_name: ${PROJECT}pub
-        env_file:
-            - .env
         environment:
             - PUSHROLE=pub
+            - PUSH_SERVER_KEY=${PUSH_SERVER_KEY}
         volumes_from:
             - source
         networks:
@@ -42,10 +41,9 @@ services:
     push_sub:
         build: push_server
         container_name: ${PROJECT}sub
-        env_file:
-            - .env
         environment:
             - PUSHROLE=sub
+            - PUSH_SERVER_KEY=${PUSH_SERVER_KEY}
         volumes_from:
             - source
         networks:
