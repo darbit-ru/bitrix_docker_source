@@ -1,4 +1,4 @@
-FROM rust:1.65 as builder
+FROM rust:1.70 as builder
 
 WORKDIR /usr/src/push-server
 
