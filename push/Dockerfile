@@ -1,4 +1,4 @@
-FROM gromdron/bitrix-push-workspace:v1.0
+FROM darbit/bitrix-push-server:v2.0
 
 WORKDIR /opt/push-server
 
