@@ -25,13 +25,10 @@ services:
             - source
 
     push_pub:
-        build: push-pub
+        build: push_server
         container_name: ${PROJECT}pub
         env_file:
             - .env
-        ports:
-            - '${INTERFACE}:9010:9010'
-            - '${INTERFACE}:9011:9011'
         environment:
             - PUSHROLE=pub
         volumes_from:
@@ -43,13 +40,10 @@ services:
         restart: unless-stopped
 
     push_sub:
-        build: push-sub
+        build: push_server
         container_name: ${PROJECT}sub
         env_file:
             - .env
-        ports:
-            - '${INTERFACE}:8010:8010'
-            - '${INTERFACE}:8011:8011'
         environment:
             - PUSHROLE=sub
         volumes_from:
