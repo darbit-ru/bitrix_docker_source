@@ -13,7 +13,7 @@ server {
     add_header X-Content-Type-Options nosniff;
 
     location ~* ^/bitrix/subws/ {
-        proxy_pass http://nodejs_sub;
+        proxy_pass http://push-upstream;
         # http://blog.martinfjordvald.com/2013/02/websockets-in-nginx/
         # 12h+0.5
         proxy_max_temp_file_size 0;
@@ -25,13 +25,13 @@ server {
 
     location ~* ^/bitrix/sub/ {
         rewrite ^/bitrix/sub/(.*)$ /bitrix/subws/$1 break;
-        proxy_pass http://nodejs_sub;
+        proxy_pass http://push-upstream;
         proxy_max_temp_file_size 0;
         proxy_read_timeout  43800;
     }
 
     location ~* ^/bitrix/rest/ {
-        proxy_pass http://nodejs_pub;
+        proxy_pass http://push-upstream;
         proxy_max_temp_file_size 0;
         proxy_read_timeout  43800;
     }
