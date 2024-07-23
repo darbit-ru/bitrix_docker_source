@@ -12,19 +12,6 @@ server {
     # bitrix recommendation, respect server's mime-type and don't try to guess it
     add_header X-Content-Type-Options nosniff;
 
-    if (!-e $request_filename) {
-       rewrite  ^(.*)$  /bitrix/urlrewrite.php last;
-    }
-
-    # remove multiple slashes
-    # duplicated slashes sometimes will work and won't be rewritten, fixing it in this configuration is tricky
-    rewrite ^([^.]*?\/)\/+(.*)$ $1$2 permanent;
-
-    # redirect index.php to page without it
-    if ($request_uri ~* "^(.*/)index\.php$") {
-        return 301 $1;
-    }
-
     location ~* ^/bitrix/subws/ {
         proxy_pass http://nodejs_sub;
         # http://blog.martinfjordvald.com/2013/02/websockets-in-nginx/
@@ -47,6 +34,19 @@ server {
         proxy_pass http://nodejs_pub;
         proxy_max_temp_file_size 0;
         proxy_read_timeout  43800;
+    }
+
+    if (!-e $request_filename) {
+       rewrite  ^(.*)$  /bitrix/urlrewrite.php last;
+    }
+
+    # remove multiple slashes
+    # duplicated slashes sometimes will work and won't be rewritten, fixing it in this configuration is tricky
+    rewrite ^([^.]*?\/)\/+(.*)$ $1$2 permanent;
+
+    # redirect index.php to page without it
+    if ($request_uri ~* "^(.*/)index\.php$") {
+        return 301 $1;
     }
 
     location / {
