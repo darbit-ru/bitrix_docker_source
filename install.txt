@@ -1,1 +1,8 @@
 Download .sh installer file from https://github.com/darbit-ru/bitrix_docker_installer and run it.
+
+Настройки push-сервера
+После запуска проекта необходимо закончить настройку push-сервера.
+
+На сервер установлена:   Виртуальная машина 7.3 и новее (Bitrix Push server 2.0)  Путь для публикации команд: http://push:9099/bitrix/pub/ Код-подпись для взаимодействия с сервером: <из push_config.toml>
+
+В случае если в push_config.toml в разделе [security] указано enabled = false то не важно что указано к "код-подпись" - все равно не проверяется.

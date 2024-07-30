@@ -36,10 +36,6 @@ server {
         proxy_read_timeout  43800;
     }
 
-    if (!-e $request_filename) {
-       rewrite  ^(.*)$  /bitrix/urlrewrite.php last;
-    }
-
     # remove multiple slashes
     # duplicated slashes sometimes will work and won't be rewritten, fixing it in this configuration is tricky
     rewrite ^([^.]*?\/)\/+(.*)$ $1$2 permanent;
@@ -50,18 +46,6 @@ server {
     }
 
     location / {
-        if (-f /var/www/bitrix/index.php) {
-            root /var/www/bitrix;
-            break;
-        }
-        if (-f /var/www/bitrix/bitrixsetup.php) {
-            root /var/www/bitrix;
-            break;
-        }
-        if (-f /var/www/bitrix/restore.php) {
-            root /var/www/bitrix;
-            break;
-        }
         try_files $uri $uri/ @bitrix;
         root  /var/www/bitrix;
     }
