@@ -7,7 +7,6 @@ RUN apt-get update \
 
 ADD conf/nginx.conf /etc/nginx/
 COPY conf/conf.d/ /etc/nginx/conf.d/
-COPY letsencrypt/ /etc/letsencrypt/
 
 COPY cron/cronjob /etc/cron.d/cronjob
 RUN chmod 0644 /etc/cron.d/cronjob
@@ -19,4 +18,4 @@ RUN usermod -u 1000 www-data
 
 CMD ["nginx"]
 
-EXPOSE 80 443 9999
+EXPOSE 80 443
