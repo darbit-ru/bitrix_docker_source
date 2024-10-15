@@ -100,7 +100,8 @@ services:
             - ${SITE_PATH}:/var/www/bitrix
             - /etc/localtime:/etc/localtime/:ro
             - ./logs/push-server:/var/log/push-server
-            - ./letsencrypt:/etc/letsencrypt
+            - ./nginx/letsencrypt:/etc/letsencrypt
+            - ./nginx/conf/conf.d:/etc/nginx/conf.d
         networks:
             - bitrixdock
 
