@@ -1,4 +1,4 @@
-FROM nginx:1.20.2
+FROM nginx:1.30.4
 
 RUN apt-get update \
     && apt-get -y install cron \
@@ -18,4 +18,4 @@ RUN usermod -u 1000 www-data
 
 CMD ["nginx"]
 
-EXPOSE 80 443
+EXPOSE 80 443 8010 9010 9011

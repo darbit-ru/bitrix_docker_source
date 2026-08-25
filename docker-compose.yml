@@ -6,7 +6,6 @@ services:
         volumes_from:
             - source
         links:
-            - db
             - memcached
         environment:
             TZ: Asia/Aqtobe
@@ -16,14 +15,49 @@ services:
             - bitrixdock
         restart: unless-stopped
 
-    push:
-        build: push
-        container_name: ${PROJECT}push
+    redis:
+        build: ./redis
+        container_name: ${PROJECT}redis
+        volumes_from:
+            - source
+        networks:
+            - bitrixdock
         environment:
+            TZ: Asia/Aqtobe
+        restart: unless-stopped
+
+    pub:
+        build: ./push
+        container_name: ${PROJECT}pub
+        environment:
+            PUSHROLE: pub
             PUSH_SERVER_KEY: ${PUSH_SERVER_KEY}
+            REDIS_SOCK: redis:6379
             TZ: Asia/Aqtobe
         volumes_from:
             - source
+        depends_on:
+            - redis
+        links:
+            - redis
+        networks:
+            - bitrixdock
+        restart: unless-stopped
+
+    sub:
+        build: ./push
+        container_name: ${PROJECT}sub
+        environment:
+            PUSHROLE: sub
+            PUSH_SERVER_KEY: ${PUSH_SERVER_KEY}
+            REDIS_SOCK: redis:6379
+            TZ: Asia/Aqtobe
+        volumes_from:
+            - source
+        depends_on:
+            - redis
+        links:
+            - redis
         networks:
             - bitrixdock
         restart: unless-stopped
@@ -33,7 +67,8 @@ services:
         container_name: ${PROJECT}web_server
         depends_on:
             - source
-            - push
+            - sub
+            - pub
         volumes_from:
             - source
         ports:
@@ -41,7 +76,8 @@ services:
             - '${INTERFACE}:443:443'
         links:
             - php
-            - push
+            - sub
+            - pub
         networks:
             - bitrixdock
         environment:
@@ -65,7 +101,7 @@ services:
             MYSQL_USER: ${MYSQL_USER}
             MYSQL_PASSWORD: ${MYSQL_PASSWORD}
             TZ: Asia/Aqtobe
-        command: ["--default-authentication-plugin=mysql_native_password", "--sql_mode="]
+        command: ["--mysql-native-password=ON", "--sql_mode="]
         networks:
             - bitrixdock
         stdin_open: true
@@ -99,6 +135,7 @@ services:
             - cache:/var/lib/memcached
             - ${SITE_PATH}:/var/www/bitrix
             - /etc/localtime:/etc/localtime/:ro
+            - ./logs/redis:/var/log/redis
             - ./logs/push-server:/var/log/push-server
             - ./nginx/letsencrypt:/etc/letsencrypt
             - ./nginx/conf/conf.d:/etc/nginx/conf.d

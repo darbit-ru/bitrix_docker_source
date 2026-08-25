@@ -1,11 +1,24 @@
-FROM darbit/bitrix-push-server:v2.0
+FROM node:10
+
+VOLUME /var/log/push-server
+
+RUN mkdir -p /opt/push-server
+
+ADD https://repos.1c-bitrix.ru/yum-testing/push-server-2.0.8.tar.gz /opt/push-server/push-server.tar.gz
 
 WORKDIR /opt/push-server
 
-EXPOSE 9099
+RUN tar xzvvf push-server.tar.gz && \
+    rm -f push-server.tar.gz
 
-COPY push_config.toml .
+RUN npm install --production
 
-ENV CONFIG_FILE=/opt/push-server/push_config.toml
+COPY docker-entrypoint.sh /usr/local/bin/
+COPY conf/push-server-pub-__PORT__.json /etc/push-server/push-server-pub-__PORT__.json
+COPY conf/push-server-sub-__PORT__.json /etc/push-server/push-server-sub-__PORT__.json
 
-CMD ["push-server"]
+RUN chmod 0755 /usr/local/bin/docker-entrypoint.sh
+
+EXPOSE 8010 9010 9011
+
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]

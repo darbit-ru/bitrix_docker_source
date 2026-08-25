@@ -13,7 +13,8 @@ server {
     add_header X-Content-Type-Options nosniff;
 
     location ~* ^/bitrix/subws/ {
-        proxy_pass http://push-upstream;
+        access_log off;
+        proxy_pass http://nodejs_sub;
         # http://blog.martinfjordvald.com/2013/02/websockets-in-nginx/
         # 12h+0.5
         proxy_max_temp_file_size 0;
@@ -24,14 +25,23 @@ server {
     }
 
     location ~* ^/bitrix/sub/ {
+        access_log off;
         rewrite ^/bitrix/sub/(.*)$ /bitrix/subws/$1 break;
-        proxy_pass http://push-upstream;
+        proxy_pass http://nodejs_sub;
+        proxy_max_temp_file_size 0;
+        proxy_read_timeout  43800;
+    }
+
+    location ~* ^/bitrix/pub/ {
+        access_log off;
+        proxy_pass http://nodejs_pub;
         proxy_max_temp_file_size 0;
         proxy_read_timeout  43800;
     }
 
     location ~* ^/bitrix/rest/ {
-        proxy_pass http://push-upstream;
+        access_log off;
+        proxy_pass http://nodejs_pub;
         proxy_max_temp_file_size 0;
         proxy_read_timeout  43800;
     }
@@ -59,6 +69,11 @@ server {
         include fastcgi_params;
         # make SERVER_NAME behave same as HTTP_HOST
         fastcgi_param SERVER_NAME $host;
+        fastcgi_param HTTPS $fastcgi_https;
+        fastcgi_param REQUEST_SCHEME $fastcgi_request_scheme;
+        fastcgi_param SERVER_PORT $fastcgi_server_port;
+        fastcgi_param HTTP_X_FORWARDED_PROTO $http_x_forwarded_proto;
+        fastcgi_param HTTP_X_FORWARDED_SSL $http_x_forwarded_ssl;
         fastcgi_param SCRIPT_FILENAME $document_root/bitrix/urlrewrite.php;
     }
 
@@ -70,6 +85,11 @@ server {
         fastcgi_read_timeout 21600;
         # make SERVER_NAME behave same as HTTP_HOST
         fastcgi_param SERVER_NAME $host;
+        fastcgi_param HTTPS $fastcgi_https;
+        fastcgi_param REQUEST_SCHEME $fastcgi_request_scheme;
+        fastcgi_param SERVER_PORT $fastcgi_server_port;
+        fastcgi_param HTTP_X_FORWARDED_PROTO $http_x_forwarded_proto;
+        fastcgi_param HTTP_X_FORWARDED_SSL $http_x_forwarded_ssl;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         client_body_buffer_size 1024m;
         client_max_body_size 1024m;
@@ -114,6 +134,11 @@ server {
         fastcgi_read_timeout 21600;
         # make SERVER_NAME behave same as HTTP_HOST
         fastcgi_param SERVER_NAME $host;
+        fastcgi_param HTTPS $fastcgi_https;
+        fastcgi_param REQUEST_SCHEME $fastcgi_request_scheme;
+        fastcgi_param SERVER_PORT $fastcgi_server_port;
+        fastcgi_param HTTP_X_FORWARDED_PROTO $http_x_forwarded_proto;
+        fastcgi_param HTTP_X_FORWARDED_SSL $http_x_forwarded_ssl;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
     }
 

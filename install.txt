@@ -3,6 +3,15 @@ Download .sh installer file from https://github.com/darbit-ru/bitrix_docker_inst
 Настройки push-сервера
 После запуска проекта необходимо закончить настройку push-сервера.
 
-На сервер установлена:   Виртуальная машина 7.3 и новее (Bitrix Push server 2.0)  Путь для публикации команд: http://push:9099/bitrix/pub/ Код-подпись для взаимодействия с сервером: <из push_config.toml>
+На сервер установлена схема Bitrix Push server 2.0 с отдельными контейнерами redis, pub и sub.
 
-В случае если в push_config.toml в разделе [security] указано enabled = false то не важно что указано к "код-подпись" - все равно не проверяется.
+Путь для публикации команд внутри docker-сети: http://pub:9010/bitrix/pub/
+Публичный путь для подписки клиентов: https://<ваш-домен>/bitrix/sub/
+Публичный путь для WebSocket: wss://<ваш-домен>/bitrix/subws/
+Код-подпись для взаимодействия с сервером: значение PUSH_SERVER_KEY из .env
+
+Настройки подключения к БД берутся из .env:
+сервер БД: DB_HOST
+имя БД: MYSQL_DATABASE
+пользователь: MYSQL_USER
+пароль: MYSQL_PASSWORD
