@@ -15,6 +15,7 @@ WEB_SERVER_TYPE=nginx
 # MySQL settings. Allowed value is mysql or percona.
 DB_SERVER_TYPE=mysql
 DB_HOST=db
+DB_PORT=3306
 MYSQL_DATABASE=bitrix
 MYSQL_USER=bitrix
 MYSQL_PASSWORD=#MYSQL_PASSWORD#
